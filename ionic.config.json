@@ -1,0 +1,7 @@
+{
+  "name": "Depa",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
