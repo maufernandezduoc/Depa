@@ -1,0 +1,88 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Paquete</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-segment (ionChange)="cambiarSegmento($event)">
+    <ion-segment-button value="ingreso" checked>
+      <ion-label>Ingreso</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="retiro">
+      <ion-label>Retiro</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <ng-container *ngIf="segmentoActual === 'ingreso'">
+    <!-- Sección de ingreso -->
+    <ion-item>
+      <ion-label>Edificio</ion-label>
+      <ion-select [(ngModel)]="selectedTorre" (ionChange)="seleccionarTorre($event)">
+        <ion-select-option *ngFor="let edificio of edificios" [value]="edificio.id_edificio">
+          {{ edificio.nombre_edificio }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label>Departamento</ion-label>
+      <ion-select [(ngModel)]="selectedDepartamento" (ionChange)="seleccionarDepartamento($event)">
+        <ion-select-option *ngFor="let departamento of departamentosFiltrados" [value]="departamento.id_departamento">
+          {{ departamento.nombre_departamento }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label>Cámara</ion-label>
+      <ion-button slot="end" (click)="capturePhoto()">
+        <ion-icon name="camera"></ion-icon>
+      </ion-button>
+    </ion-item>
+  
+    <ion-item *ngIf="capturedImage">
+      <img [src]="capturedImage" width="200" height="200" />
+    </ion-item>
+  
+    <ion-item>
+      <ion-label>Mensaje</ion-label>
+      <ion-textarea #mensajeInput></ion-textarea>
+    </ion-item>
+  
+    <ion-button expand="full" color="primary" (click)="registrar()">Registrar</ion-button>
+  </ng-container>
+
+  <ng-container *ngIf="segmentoActual === 'retiro'">
+    <!-- Sección de retiro -->
+    <ion-list>
+      <!-- Encabezado de la lista -->
+      <ion-list-header>
+        <ion-label>Dep.</ion-label>
+        <ion-label>Torre</ion-label>
+        <ion-label>Fecha</ion-label>
+        <ion-label>Foto</ion-label>
+        <ion-label>Retirar</ion-label>
+      </ion-list-header>
+  
+      <!-- Items de la lista -->
+      <ion-item *ngFor="let pedido of pedidosR">
+        <ion-label>{{ pedido.id_departamento }}</ion-label>
+        <ion-label>{{ pedido.id_edificio }}</ion-label>
+        <ion-label>{{ pedido.fecha_recepcion }}</ion-label>
+  
+        <!-- Botón para ver la foto del pedido -->
+        <ion-button (click)="verFotoPedido(pedido)">
+          <ion-icon name="image"></ion-icon>
+        </ion-button>
+  
+        <!-- Botón para capturar nueva foto -->
+        <ion-button slot="end" (click)="capturarFoto()">
+          <ion-icon name="camera"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+  
+
+</ion-content>

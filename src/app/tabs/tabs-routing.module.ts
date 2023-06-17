@@ -8,27 +8,31 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
-        loadChildren: () => import('../tab1/tab1.module').then(m => m.Tab1PageModule)
-      },
-      {
-        path: 'tab2',
-        loadChildren: () => import('../tab2/tab2.module').then(m => m.Tab2PageModule)
-      },
-      {
-        path: 'tab3',
-        loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule)
-      },
-      {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: 'patente',
         pathMatch: 'full'
+      },
+      {
+        path: 'patente',
+        loadChildren: () => import('../patente/patente.module').then(m => m.PatentePageModule)
+      },
+      {
+        path: 'estacionamiento',
+        loadChildren: () => import('../estacionamiento/estacionamiento.module').then(m => m.EstacionamientoPageModule)
+      },
+      {
+        path: 'visita',
+        loadChildren: () => import('../visita/visita.module').then(m => m.VisitaPageModule)
+      },
+      {
+        path: 'paquete',
+        loadChildren: () => import('../paquete/paquete.module').then(m => m.PaquetePageModule)
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: 'tabs/patente',
     pathMatch: 'full'
   }
 ];
