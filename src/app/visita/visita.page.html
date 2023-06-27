@@ -46,7 +46,7 @@
     </ion-item>
     <ion-item>
       <ion-label>Patente (Opcional)</ion-label>
-      <ion-input type="text"></ion-input>
+      <ion-input type="text" [(ngModel)]="patente"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>Estacionamiento (Opcional)</ion-label>
@@ -54,4 +54,4 @@
     </ion-item>
   </ion-list>
 
-  <ion-button expand="full">Registrar</ion-button>
+  <ion-button expand="full" (click)="registrar()" >Registrar</ion-button>

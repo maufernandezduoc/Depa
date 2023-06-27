@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApiServiceService } from '../api-service.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -7,30 +9,39 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
-  email: string = '';
-password: string = '';
+  usuario: string = '';
+  clave: string = '';
 
-
-  constructor(private router: Router) {}
+  constructor(private apiService: ApiServiceService,private toastController: ToastController, private router: Router) {}
 
   login() {
-    // Aquí puedes agregar la lógica de autenticación
-    // por ejemplo, llamar a un servicio de autenticación
-    // y redirigir al usuario a la página principal si el inicio de sesión es exitoso
-    if (this.email === 'mauro@mauro.cl' && this.password === 'mauro123') {
-      localStorage.setItem('session', 'true'); // Almacena el indicador de sesión iniciada
-      localStorage.setItem('username', this.email); // Almacena el nombre de usuario
-      this.router.navigate(['/tabs']);
-    } else {
-      console.log('Credenciales inválidas');
-    }
+    // Llama al servicio para obtener la lista de empleados
+    this.apiService.getEmpleado().subscribe((empleados: any[]) => {
+      // Busca el empleado que coincide con el usuario ingresado
+      const empleado = empleados.find((emp) => emp.usuario === this.usuario);
+
+      if (empleado && empleado.clave === this.clave) {
+        // Empleado encontrado y contraseña coincidente
+        const rutEmpleado = empleado.rut;
+
+        localStorage.setItem('session', 'true'); // Almacena el indicador de sesión iniciada
+        localStorage.setItem('username', this.usuario); // Almacena el usuario como nombre de usuario
+        localStorage.setItem('rutEmpleado', rutEmpleado); 
+        this.mostrarNotificacion('Ingreso con éxito');// Almacena el rut del empleado
+        this.router.navigate(['/tabs']);
+
+      } else {
+        console.log('Credenciales inválidas');
+      }
+    });
   }
-  
-  
+
+  async mostrarNotificacion(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 2000
+    });
+    toast.present();
+  }
 }
-
-
-
-
-
 

@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-segment (ionChange)="cambiarSegmento($event)">
+  <ion-segment (ionChange)="cambiarSegmento($event)" [(ngModel)]="segmentoActual">
     <ion-segment-button value="ingreso" checked>
       <ion-label>Ingreso</ion-label>
     </ion-segment-button>
@@ -24,7 +24,7 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
-  
+
     <ion-item>
       <ion-label>Departamento</ion-label>
       <ion-select [(ngModel)]="selectedDepartamento" (ionChange)="seleccionarDepartamento($event)">
@@ -33,23 +33,24 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
-  
+
     <ion-item>
       <ion-label>Cámara</ion-label>
       <ion-button slot="end" (click)="capturePhoto()">
         <ion-icon name="camera"></ion-icon>
       </ion-button>
     </ion-item>
-  
-    <ion-item *ngIf="capturedImage">
-      <img [src]="capturedImage" width="200" height="200" />
-    </ion-item>
-  
+
+    <div *ngIf="capturedImageUri" class="image-container">
+      <img [src]="capturedImageUri" alt="Imagen capturada" />
+    </div>
+    
+
     <ion-item>
       <ion-label>Mensaje</ion-label>
       <ion-textarea #mensajeInput></ion-textarea>
     </ion-item>
-  
+
     <ion-button expand="full" color="primary" (click)="registrar()">Registrar</ion-button>
   </ng-container>
 
@@ -58,31 +59,51 @@
     <ion-list>
       <!-- Encabezado de la lista -->
       <ion-list-header>
-        <ion-label>Dep.</ion-label>
+        <ion-label>Departamento</ion-label>
         <ion-label>Torre</ion-label>
         <ion-label>Fecha</ion-label>
-        <ion-label>Foto</ion-label>
-        <ion-label>Retirar</ion-label>
+
       </ion-list-header>
-  
+
       <!-- Items de la lista -->
-      <ion-item *ngFor="let pedido of pedidosR">
-        <ion-label>{{ pedido.id_departamento }}</ion-label>
-        <ion-label>{{ pedido.id_edificio }}</ion-label>
-        <ion-label>{{ pedido.fecha_recepcion }}</ion-label>
-  
-        <!-- Botón para ver la foto del pedido -->
-        <ion-button (click)="verFotoPedido(pedido)">
-          <ion-icon name="image"></ion-icon>
-        </ion-button>
-  
-        <!-- Botón para capturar nueva foto -->
-        <ion-button slot="end" (click)="capturarFoto()">
-          <ion-icon name="camera"></ion-icon>
-        </ion-button>
+      <ion-item *ngFor="let pedido of pedidosR" (click)="verFotoPedido(pedido)">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-label>{{ pedido.id_departamento }}</ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label>{{ pedido.id_edificio }}</ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label>{{ formatearFecha(separarFechaHora(pedido.fecha_recepcion).fecha) }}</ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="pedidoSeleccionado === pedido">
+            <ion-col>
+              <div class="image-container">
+                <img [src]="pedido.evidencia_recepcion" alt="Foto del pedido" />
+              </div>
+              <div *ngIf="nuevaFotoRetiro">
+                <div class="image-container">
+                  <img [src]="nuevaFotoRetiro" alt="Nueva foto del retiro" />
+                </div>
+              </div>
+              <div>
+                <ion-button expand="full" color="primary" (click)="capturarFotoRetiro()">
+                  {{ nuevaFotoRetiro ? 'Cambiar Foto' : 'Foto Retiro' }}
+                </ion-button>
+              </div>
+              <div *ngIf="pedido.evidencia_recepcion && nuevaFotoRetiro">
+                <ion-button expand="full" color="primary" (click)="registrarRetiro()">Registrar Retiro</ion-button>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-item>
     </ion-list>
+
+    
   </ng-container>
-  
 
 </ion-content>

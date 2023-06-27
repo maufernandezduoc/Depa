@@ -22,9 +22,28 @@
   <div class="input-container">
     <ion-item>
       <ion-label position="floating">Ingrese la patente</ion-label>
-      <ion-input type="text"></ion-input>
+      <ion-input type="text" [(ngModel)]="patente"></ion-input>
     </ion-item>
 
-    <ion-button expand="full">Buscar</ion-button>
+    <ion-button expand="full" (click)="buscar()">Buscar</ion-button>
   </div>
+
+  <div *ngIf="vehiculo" class="datos-container">
+    <h2>Datos del vehículo:</h2>
+    <p><strong>Patente:</strong> {{ vehiculo.patente }}</p>
+    <p><strong>Tipo de vehículo:</strong> {{ vehiculo.tipo_veh }}</p>
+    <p><strong>Color del vehículo:</strong> {{ vehiculo.color_veh }}</p>
+    <p><strong>Primer nombre:</strong> {{ vehiculo.primer_nombre }}</p>
+    <p><strong>Primer apellido:</strong> {{ vehiculo.primer_apellido }}</p>
+    <p><strong>ID del departamento:</strong> {{ vehiculo.id_departamento }}</p>
+    <p><strong>ID del est:</strong> {{ vehiculo.id_est }}</p>
+    <p><strong>Tipo de est:</strong> {{ vehiculo.tipo_est }}</p>
+  </div>
+
+  <div *ngIf="!vehiculo" class="mensaje-container">
+    <p>{{ mensajeNoEncontrado }}</p>
+  </div>
+
+  <!-- Agregar como visita solo si no se encontró el vehículo -->
+  <ion-button expand="full" (click)="agregarComoVisita()" *ngIf="!vehiculo && mostrarBotonVisita && patente">Agregar como visita</ion-button>
 </ion-content>

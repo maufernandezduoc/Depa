@@ -7,13 +7,19 @@
 <ion-content>
   <ion-item>
     <ion-label position="floating">Correo electrónico</ion-label>
-    <ion-input type="email" [(ngModel)]="email"></ion-input>
+    <ion-input type="email" [(ngModel)]="usuario"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Contraseña</ion-label>
-    <ion-input type="password" [(ngModel)]="password"></ion-input>
+    <ion-input type="password" [(ngModel)]="clave"></ion-input>
   </ion-item>
 
   <ion-button expand="full" (click)="login()">Iniciar sesión</ion-button>
+  <div class="logo-container" style="margin-top: 40%;">
+    <img
+      src="/assets/logo.png"
+      alt="Logo de la empresa"
+    />
+  </div>
 </ion-content>

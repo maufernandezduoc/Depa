@@ -1,0 +1,14 @@
+ ion-button {
+    &.verde {
+        --background: green;
+        --color: white;
+      }
+  
+      &.rojo {
+        --background: red;
+        --color: white;
+      }
+    }
+  
+
+  

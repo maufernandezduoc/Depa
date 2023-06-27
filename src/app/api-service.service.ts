@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiServiceService {
-  private API_URL = 'http://localhost:3000'; // Reemplaza con la URL de tu API
+  private API_URL = 'https://maufernandezduoc-orange-broccoli-45q6459xgrjhjvrv-3000.preview.app.github.dev'; // Reemplaza con la URL de tu API
 
   constructor(private http: HttpClient) { }
 
@@ -33,8 +33,17 @@ export class ApiServiceService {
   getDepartamentos(): Observable<any> {
     return this.http.get(`${this.API_URL}/TraerDepartamento`);
   }
- 
-
+  getEmpleado(): Observable<any> {
+    return this.http.get(`${this.API_URL}/TraerEmpleado`);
+  }
+  
+  actualizarPedido(id: string, nuevosDatos: any): Observable<any> {
+    const url = `${this.API_URL}/ActualizarPedido/${id}`;
+    return this.http.put(url, nuevosDatos);
+  }
+  
+  
+  
   
 
   // Agrega los demás métodos para interactuar con la API según tus necesidades
