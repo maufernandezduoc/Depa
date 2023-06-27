@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiServiceService } from '../api-service.service';
+import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 
 interface Button {
   label: string;
@@ -15,88 +18,54 @@ interface Button {
   styleUrls: ['./estacionamiento.page.scss'],
 })
 export class EstacionamientoPage implements OnInit {
-  buttons: Button[] = [];
-  buttonTypes: string[] = ['visita', 'discapacitados', 'adicional'];
+  dataEst: any[] = [];
+  username: string = '';
 
-  data = [
-    { id_est: 'V01', id_tipoest: 3, estado: 'libre' },
-    { id_est: 'V02', id_tipoest: 3, estado: 'libre' },
-    { id_est: 'V03', id_tipoest: 3, estado: 'libre' },
-    { id_est: 'V04', id_tipoest: 3, estado: 'libre' },
-    { id_est: 'D01', id_tipoest: 4, estado: 'ocupado' },
-    { id_est: 'D02', id_tipoest: 4, estado: 'ocupado' },
-    { id_est: 'D03', id_tipoest: 4, estado: 'ocupado' },
-    { id_est: 'A01', id_tipoest: 5, estado: 'libre' },
-    { id_est: 'A02', id_tipoest: 5, estado: 'libre' },
-    { id_est: 'A03', id_tipoest: 5, estado: 'libre' },
-    { id_est: 'A04', id_tipoest: 5, estado: 'libre' },
-    { id_est: 'A05', id_tipoest: 5, estado: 'libre' },
-    { id_est: 'A06', id_tipoest: 5, estado: 'libre' },
-    { id_est: 'A07', id_tipoest: 5, estado: 'libre' },
-    { id_est: 'A08', id_tipoest: 5, estado: 'libre' },
-    { id_est: 'A09', id_tipoest: 5, estado: 'libre' },
-    { id_est: 'A10', id_tipoest: 5, estado: 'libre' },
-  ];
+  constructor(private router: Router,
+    private toastController: ToastController,private apiService: ApiServiceService) {}
 
   ngOnInit() {
-    this.generateButtons();
+    this.loadData();
+    this.username = localStorage.getItem('username') ?? '';
   }
 
-  generateButtons() {
-    const mapping: { [key: number]: { type: string; label: string } } = {
-      3: { type: 'visita', label: 'Visita' },
-      4: { type: 'discapacitados', label: 'Discapacitados' },
-      5: { type: 'adicional', label: 'Adicional' },
-    };
+  ionViewDidEnter() {
+    this.loadData();
+  }
 
-    this.buttons = this.data.reduce((acc: Button[], item) => {
-      const { id_est, id_tipoest, estado } = item;
-
-      if (!id_est.match(/[A-Z]/)) {
-        return acc; // No mostrar botón si no tiene letra en id_est
+  loadData() {
+    this.apiService.getEstacionamiento().subscribe(
+      (response: any[]) => {
+        console.log(response);
+        this.dataEst = response;
+        console.log(this.dataEst);
+      },
+      (error: any) => {
+        console.error(error);
       }
-
-      const typeInfo = mapping[id_tipoest];
-      if (!typeInfo) {
-        return acc; // No hay información de tipo válida para el id_tipoest
-      }
-
-      const color = estado === 'libre' ? 'success' : 'danger';
-      const label = `${typeInfo.label} ${id_est}`;
-      const title = `Título ${typeInfo.label}`;
-      const count = parseInt(id_est.substring(1), 10); // Parsear número sin letra a entero
-
-      const button: Button = {
-        label,
-        title,
-        count,
-        type: typeInfo.type,
-        color,
-        state: estado,
-      };
-
-      return [...acc, button];
-    }, []);
+    );
   }
 
-  changeButtonState(button: Button) {
-    button.state = button.state === 'verde' ? 'rojo' : 'verde';
-    button.color = button.state === 'verde' ? 'success' : 'danger';
+  getUniqueTipoEst(): string[] {
+    const uniqueTipoEst = Array.from(new Set(this.dataEst.map(estacionamiento => estacionamiento.tipo_est)));
+    return uniqueTipoEst;
+  }
+  
+  getEstacionamientosByTipoEst(tipoEst: string): any[] {
+    return this.dataEst.filter(estacionamiento => estacionamiento.tipo_est === tipoEst);
+  }
+  logout() {
+    localStorage.removeItem('username');
+    localStorage.removeItem('session');
+    this.mostrarNotificacion('Sesión cerrada');
+    this.router.navigate(['/login']);
   }
 
-  getTypeLabel(type: string): string {
-    if (type === 'visita') {
-      return 'Visita';
-    } else if (type === 'discapacitados') {
-      return 'Discapacitados';
-    } else if (type === 'adicional') {
-      return 'Adicional';
-    } else {
-      return '';
-    }
-  }
-
-  getButtonsByType(type: string): Button[] {
-    return this.buttons.filter((button) => button.type === type);
+  async mostrarNotificacion(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 2000
+    });
+    toast.present();
   }
 }

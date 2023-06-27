@@ -1,28 +1,30 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Estacionamiento</ion-title>
+    <ion-buttons slot="start">
+      <ion-title>Estacionamiento</ion-title>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-label>{{ username }}</ion-label>
+      <ion-button class="blue-button" (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Estacionamiento</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <ion-grid>
-    <ion-row *ngFor="let type of buttonTypes">
-      <ion-col size="12">
-        <h2>{{ getTypeLabel(type) }}</h2>
-        <ion-row>
-          <ion-col *ngFor="let button of getButtonsByType(type)" size="6">
-            <ion-button expand="full" [color]="button.color" (click)="changeButtonState(button)">
-              <ion-label>{{ button.label }}</ion-label>
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+<ion-content>
+  <div class="circle-container">
+    <ng-container *ngFor="let tipoEst of getUniqueTipoEst()">
+      <div class="circle-divider" *ngIf="tipoEst !== 'Propietario' && tipoEst !== 'Arrendatario'">
+        <span class="circle-label">{{ tipoEst }}</span>
+      </div>
+      <div class="circle-wrapper" *ngIf="tipoEst !== 'Propietario' && tipoEst !== 'Arrendatario'">
+        <ion-button *ngFor="let estacionamiento of getEstacionamientosByTipoEst(tipoEst)" [id]="estacionamiento.id_est" [color]="estacionamiento.estado === '1' ? 'danger' : 'success'" class="circle-button">
+          {{ estacionamiento.id_est.toString().substring(1) }}
+        </ion-button>
+      </div>
+    </ng-container>
+  </div>
 </ion-content>
+

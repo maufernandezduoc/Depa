@@ -28,20 +28,20 @@
     </ion-item>
 
     <ion-item>
-      <ion-label>Torre</ion-label>
-      <ion-select>
-        <ion-select-option value="torre1">Torre 1</ion-select-option>
-        <ion-select-option value="torre2">Torre 2</ion-select-option>
-        <ion-select-option value="torre3">Torre 3</ion-select-option>
+      <ion-label>Edificio</ion-label>
+      <ion-select [(ngModel)]="selectedTorre" (ionChange)="seleccionarTorre($event)">
+        <ion-select-option *ngFor="let edificio of edificios" [value]="edificio.id_edificio">
+          {{ edificio.nombre_edificio }}
+        </ion-select-option>
       </ion-select>
     </ion-item>
 
     <ion-item>
       <ion-label>Departamento</ion-label>
-      <ion-select>
-        <ion-select-option value="depto1">Departamento 1</ion-select-option>
-        <ion-select-option value="depto2">Departamento 2</ion-select-option>
-        <ion-select-option value="depto3">Departamento 3</ion-select-option>
+      <ion-select [(ngModel)]="selectedDepartamento" (ionChange)="seleccionarDepartamento($event)">
+        <ion-select-option *ngFor="let departamento of departamentosFiltrados" [value]="departamento.id_departamento">
+          {{ departamento.nombre_departamento }}
+        </ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>

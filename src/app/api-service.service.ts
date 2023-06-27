@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +42,10 @@ export class ApiServiceService {
   actualizarPedido(id: string, nuevosDatos: any): Observable<any> {
     const url = `${this.API_URL}/ActualizarPedido/${id}`;
     return this.http.put(url, nuevosDatos);
+  }
+  
+  getEstacionamiento(): Observable<any> {
+    return this.http.get(`${this.API_URL}/ObtenerEstacionamientos`);
   }
   
   
