@@ -3,7 +3,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { ApiServiceService } from '../api-service.service';
 import { formatDate } from '@angular/common';
 import { IonItem, IonTextarea, ModalController } from '@ionic/angular';
-
+import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ModalFotoPedidoPage } from '../modal-foto-pedido/modal-foto-pedido.page';
 import { GoogleDriveService } from '../google-drive.service';
@@ -57,12 +57,14 @@ export class PaquetePage implements OnInit {
   constructor(
     private modalController: ModalController,
     private toastController: ToastController,
+    private router: Router,
     
     private apiService: ApiServiceService,
   ) {}
 
   ngOnInit() {
     this.actualizarListaPedidos();
+    this.username = localStorage.getItem('username') ?? '';
   }
   
   
@@ -359,6 +361,12 @@ actualizarListaPedidos() {
   );
 }
 
+logout() {
+  localStorage.removeItem('username');
+  localStorage.removeItem('session');
+  this.mostrarNotificacion('Sesión cerrada');
+  this.router.navigate(['/login']);
+}
 
 
 

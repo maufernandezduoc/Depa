@@ -3,6 +3,7 @@ import { ApiServiceService } from '../api-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 
+
 @Component({
   selector: 'app-visita',
   templateUrl: './visita.page.html',
@@ -15,10 +16,12 @@ export class VisitaPage implements OnInit {
   selectedDepartamento: any;
   departamentos: any[] = [];
   edificios: any[] = []; 
+  username: string = '';
 
   constructor(private activatedRoute: ActivatedRoute,private apiService: ApiServiceService, private router: Router,private toastController: ToastController) { }
 
   ngOnInit() {
+    this.username = localStorage.getItem('username') ?? '';
     this.obtenerDepartamentos();
     this.activatedRoute.queryParams.subscribe(params => {
       this.patente = params['patente'];
@@ -89,6 +92,12 @@ export class VisitaPage implements OnInit {
         console.error('Error al obtener los departamentos:', error);
       }
     );
+  }
+  logout() {
+    localStorage.removeItem('username');
+    localStorage.removeItem('session');
+    this.mostrarNotificacion('Sesión cerrada');
+    this.router.navigate(['/login']);
   }
   
 
