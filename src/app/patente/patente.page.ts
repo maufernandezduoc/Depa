@@ -67,6 +67,10 @@ export class PatentePage implements OnInit {
     }
   }
 
+  convertirAMayusculas() {
+    this.patente = this.patente.toUpperCase();
+  }
+
   agregarComoVisita() {
     this.router.navigate(['/tabs/tabs/visita'], { queryParams: { patente: this.patente } });
   }

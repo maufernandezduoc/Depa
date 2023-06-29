@@ -6,7 +6,7 @@ import { IonItem, IonTextarea, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ModalFotoPedidoPage } from '../modal-foto-pedido/modal-foto-pedido.page';
-import { GoogleDriveService } from '../google-drive.service';
+
 
 import 'firebase/storage';
 import { ToastController } from '@ionic/angular';
@@ -47,7 +47,7 @@ export class PaquetePage implements OnInit {
   nuevaFotoRetiro: string = '';
   username: string = '';
   retiroExitoso: boolean = false;
-  capturedImage2: any;
+ 
   segmentoActuali: string = 'ingreso';
   pedidos: any[] = [];
   selectedPedido: any;
@@ -147,7 +147,7 @@ export class PaquetePage implements OnInit {
     const selectedTorre = this.selectedTorre;
     const selectedDepartamento = this.selectedDepartamento;
     const fechaActual = new Date();
-    const fecha_recepcion = fechaActual.toISOString().slice(0, 19).replace('T', ' '); // Convierte la fecha a formato ISO
+    const fecha_recepcion = this.obtenerFechaHoraLocal(fechaActual); // Utiliza la función para obtener la fecha y hora actual ajustada a la zona horaria local
     const timestamp = new Date().getTime();
     const id_pedido = `PEDIDO_${timestamp}`;
     
@@ -178,8 +178,8 @@ export class PaquetePage implements OnInit {
         this.mensajeInput.value = null;
         this.selectedTorre = null;
         this.selectedDepartamento = null;
-        this.capturedImageUri = ''; 
-        this.mostrarNotificacion('Ingreso con éxito');// Restablece la variable de la URI de la imagen capturada
+        this.capturedImageUri = '';
+        this.mostrarNotificacion('Ingreso con éxito');
       },
       (error) => {
         console.error('Error al insertar los datos:', error);
@@ -187,6 +187,7 @@ export class PaquetePage implements OnInit {
       }
     );
   }
+  
   
   
 
@@ -241,7 +242,7 @@ export class PaquetePage implements OnInit {
     const idPedido = this.pedidoSeleccionado.id_pedido;
     const nuevaFotoRetiro = this.nuevaFotoRetiro;
     const fechaActual = new Date();
-    const fecha_entrega = fechaActual.toISOString().slice(0, 19).replace('T', ' '); // Convierte la fecha a formato ISO
+    const fecha_entrega = this.obtenerFechaHoraLocal(fechaActual);
     const rutEmpleado = parseInt(localStorage.getItem('rutEmpleado') || '0', 10);
   
     if (isNaN(rutEmpleado)) {
@@ -265,11 +266,11 @@ export class PaquetePage implements OnInit {
         console.log('Respuesta del servidor:', response);
         console.log('Pedido actualizado correctamente');
         this.retiroExitoso = true;
-    if (this.retiroExitoso) {
-      this.actualizarListaPedidos();
-      this.mostrarNotificacion('Retiro con éxito');
-      this.nuevaFotoRetiro = '';
-    }
+        if (this.retiroExitoso) {
+          this.actualizarListaPedidos();
+          this.mostrarNotificacion('Retiro con éxito');
+          this.nuevaFotoRetiro = '';
+        }
         // Realiza acciones adicionales después de actualizar el pedido
       },
       (error) => {
@@ -277,10 +278,8 @@ export class PaquetePage implements OnInit {
         // Maneja el error de alguna manera
       }
     );
-
-    
-    
   }
+  
 
   formatearFecha(fecha: string): string {
     const fechaObj = new Date(fecha);
@@ -305,33 +304,33 @@ export class PaquetePage implements OnInit {
     const [fecha, hora] = fechaHora.split(' ');
     return { fecha, hora };
   }
-  
-  
-  
-  
-  
-  
-  
-  mostrarFoto(pedido: any) {
-    this.pedidoSeleccionado = pedido;
-    this.fotoVisible = true;
+  obtenerFechaHoraLocal(fecha: Date): string {
+    const fechaLocal = new Date(fecha.getTime() - (fecha.getTimezoneOffset() * 60000));
+    return fechaLocal.toISOString().slice(0, 19).replace('T', ' ');
   }
   
-
-
-
-mostrarModalFotoPedido() {
-  this.modalController.create({
-    component: ModalFotoPedidoPage,
-    componentProps: {
-      pedido: this.selectedPedido,
-      imagen: this.selectedPedidoImage
-    }
-  }).then(modal => {
-    this.modal = modal;
-    this.modal.present();
-  });
-}
+  
+  
+  
+  
+  
+  verfotopedido(pedido: any) {
+    // Mostrar la foto del pedido seleccionado en un modal o en otra parte de la interfaz
+    this.selectedPedido = pedido;
+    this.selectedPedidoImage = pedido.evidencia_recepcion;
+    this.mostrarModalFotoPedido();
+  }
+  
+  async mostrarModalFotoPedido() {
+    const modal = await this.modalController.create({
+      component: ModalFotoPedidoPage,
+      componentProps: {
+        image: this.selectedPedidoImage
+      }
+    });
+    await modal.present();
+  }
+  
 
 
 

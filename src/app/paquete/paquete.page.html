@@ -49,11 +49,15 @@
       </ion-button>
     </ion-item>
 
-    <div *ngIf="capturedImageUri" class="image-container">
-      <img [src]="capturedImageUri" alt="Imagen capturada" />
-    </div>
+    <ng-container *ngIf="capturedImageUri">
+      <ion-card class="custom-card">
+          <div class="image-container">
+            <img [src]="capturedImageUri" alt="Imagen capturada" class="captured-image" />
+          </div>
+      </ion-card>
+    </ng-container>
     
-
+   
     <ion-item>
       <ion-label>Mensaje</ion-label>
       <ion-textarea #mensajeInput></ion-textarea>
@@ -89,13 +93,21 @@
           </ion-row>
           <ion-row *ngIf="pedidoSeleccionado === pedido">
             <ion-col>
-              <div class="image-container">
-                <img [src]="pedido.evidencia_recepcion" alt="Foto del pedido" />
+              <div *ngIf="nuevaFotoRetiro" class="image-container">
+                <p>Foto Retiro</p>
+                <ion-card class="custom-card">
+                  <div class="image-container">
+                    <img [src]="nuevaFotoRetiro" alt="Nueva foto del retiro" />
+                  </div>
+                </ion-card>
               </div>
-              <div *ngIf="nuevaFotoRetiro">
-                <div class="image-container">
-                  <img [src]="nuevaFotoRetiro" alt="Nueva foto del retiro" />
-                </div>
+              <div class="image-container">
+                <p>Foto Registro</p>
+                <ion-card class="custom-card">
+                  <div class="image-container">
+                    <img [src]="pedido.evidencia_recepcion" alt="Foto del pedido" />
+                  </div>
+                </ion-card>
               </div>
               <div>
                 <ion-button expand="full" color="primary" (click)="capturarFotoRetiro()">

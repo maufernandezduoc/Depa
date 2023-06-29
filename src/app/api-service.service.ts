@@ -48,6 +48,9 @@ export class ApiServiceService {
     return this.http.get(`${this.API_URL}/ObtenerEstacionamientos`);
   }
   
+  insertarVisita(visita: any): Observable<any> {
+    return this.http.post(`${this.API_URL}/GuardarVisita`, visita);
+  }
   
   
   

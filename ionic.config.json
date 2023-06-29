@@ -1,7 +1,8 @@
 {
   "name": "Depa",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }
