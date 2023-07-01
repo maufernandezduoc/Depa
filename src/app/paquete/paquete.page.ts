@@ -142,52 +142,52 @@ export class PaquetePage implements OnInit {
   }
   
   registrar() {
-    // Obtener fotoComoTexto y otras variables necesarias
-    const fotoComoTexto = this.capturedImageUri; // Utiliza la variable que contiene la URI de la imagen capturada
-    const selectedTorre = this.selectedTorre;
-    const selectedDepartamento = this.selectedDepartamento;
-    const fechaActual = new Date();
-    const fecha_recepcion = this.obtenerFechaHoraLocal(fechaActual); // Utiliza la función para obtener la fecha y hora actual ajustada a la zona horaria local
-    const timestamp = new Date().getTime();
-    const id_pedido = `PEDIDO_${timestamp}`;
-    
-    const rut_empleado = parseInt(localStorage.getItem('rutEmpleado') ?? '0', 10);
+  // Obtener fotoComoTexto y otras variables necesarias
+  const fotoComoTexto = this.capturedImageUri; // Utiliza la variable que contiene la URI de la imagen capturada
+  const selectedTorre = this.selectedTorre;
+  const selectedDepartamento = this.selectedDepartamento;
+  const fechaActual = new Date();
+  const fecha_recepcion = this.obtenerFechaHoraLocal(fechaActual); // Utiliza la función para obtener la fecha y hora actual ajustada a la zona horaria local
+  const timestamp = new Date().getTime();
+  const id_pedido = `PEDIDO_${timestamp}`;
   
-    // Crear el objeto con los datos a enviar a la API
-    const pedido = {
-      id_pedido: id_pedido,
-      fecha_recepcion: fecha_recepcion,
-      fecha_entrega: null, // Asigna null si no tienes un valor específico
-      evidencia_recepcion: fotoComoTexto,
-      evidencia_entrega: null,
-      id_departamento: selectedDepartamento,
-      id_edificio: selectedTorre,
-      id_conjunto: 1,
-      rut_empleado: rut_empleado,
-      mensaje: this.mensajeInput && this.mensajeInput.value !== '' ? this.mensajeInput.value : null,
-    };
-  
-    console.log('Datos a enviar:', pedido); // Imprime los datos a enviar a la API
-  
-    this.apiService.insertarPedido(pedido).subscribe(
-      (response) => {
-        console.log('Datos insertados correctamente:', response);
-        // Realizar acciones adicionales después de que los datos se inserten correctamente
-  
-        // Limpiar los campos
-        this.mensajeInput.value = null;
-        this.selectedTorre = null;
-        this.selectedDepartamento = null;
-        this.capturedImageUri = '';
-        this.mostrarNotificacion('Ingreso con éxito');
-      },
-      (error) => {
-        console.error('Error al insertar los datos:', error);
-        // Manejar el error de alguna manera
-      }
-    );
-  }
-  
+  const rut_empleado = parseInt(localStorage.getItem('rutEmpleado') ?? '0', 10);
+
+  // Crear el objeto con los datos a enviar a la API
+  const pedido = {
+    id_pedido: id_pedido,
+    fecha_recepcion: fecha_recepcion,
+    fecha_entrega: null, // Asigna null si no tienes un valor específico
+    evidencia_recepcion: fotoComoTexto,
+    evidencia_entrega: null,
+    id_departamento: selectedDepartamento,
+    id_edificio: selectedTorre,
+    id_conjunto: 1,
+    rut_empleado: rut_empleado,
+    mensaje: this.mensajeInput && this.mensajeInput.value !== '' ? this.mensajeInput.value : null,
+  };
+
+  console.log('Datos a enviar:', pedido); // Imprime los datos a enviar a la API
+
+  this.apiService.insertarPedido(pedido).subscribe(
+    (response) => {
+      console.log('Datos insertados correctamente:', response);
+      // Realizar acciones adicionales después de que los datos se inserten correctamente
+
+      // Limpiar los campos
+      this.mensajeInput.value = null;
+      this.selectedTorre = null;
+      this.selectedDepartamento = null;
+      this.capturedImageUri = '';
+      this.mostrarNotificacion('Ingreso con éxito');
+    },
+    (error) => {
+      console.error('Error al insertar los datos:', error);
+      // Manejar el error de alguna manera
+    }
+  );
+}
+
   
   
 

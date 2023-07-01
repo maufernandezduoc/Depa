@@ -22,6 +22,7 @@ export class VisitaPage implements OnInit {
   dataEst: any[] = [];
   opcionSeleccionada: any = '';
   rut: string = '';
+  rutV: string = '';
   nombreV: string = '';
   apellidoV: string = '';
 
@@ -123,17 +124,22 @@ export class VisitaPage implements OnInit {
   }
 
   registrar() {
-    const rut = this.rut.split('-')[0];
-    const dv = this.rut.split('-')[1].toUpperCase();
+    if (!this.rutV) {
+      console.error('RUT no definido');
+      return;
+    }
+  
+    const rut = this.rutV.split('-')[0];
+    const dv = this.rutV.split('-')[1] ? this.rutV.split('-')[1].toUpperCase() : '';
     const fechaActual = new Date();
     const fecha_entrega = this.obtenerFechaHoraLocal(fechaActual);
-    
+  
     const visita = {
       rut_visita: rut,
       dv: dv,
       nombre: this.nombreV,
       apellido: this.apellidoV,
-      patente: this.patente? this.patente : null,
+      patente: this.patente ? this.patente : null,
       id_est: this.opcionSeleccionada ? this.opcionSeleccionada : null,
       id_departamento: this.selectedDepartamento,
       id_edificio: this.selectedTorre,
@@ -142,12 +148,23 @@ export class VisitaPage implements OnInit {
       fecha_sal: null
     };
   
-    // Llama al método insertarVisita del servicio ApiServiceService
     this.apiService.insertarVisita(visita).subscribe(
       (response) => {
         console.log('Visita guardada con éxito:', response);
-        this.limpiarFormulario();
+  
         this.mostrarNotificacion('Visita guardada con éxito');
+  
+        if (this.opcionSeleccionada) {
+          this.apiService.actualizarEstacionamiento(this.opcionSeleccionada, 1).subscribe(
+            (response) => {
+              console.log('Estado del estacionamiento actualizado con éxito:', response);
+              this.limpiarFormulario();
+            },
+            (error) => {
+              console.error('Error al actualizar el estado del estacionamiento:', error);
+            }
+          );
+        }
       },
       (error) => {
         console.error('Error al guardar la visita:', error);
@@ -155,6 +172,7 @@ export class VisitaPage implements OnInit {
       }
     );
   }
+  
 
   obtenerFechaHoraLocal(fecha: Date): string {
     const fechaLocal = new Date(fecha.getTime() - (fecha.getTimezoneOffset() * 60000));
@@ -183,13 +201,26 @@ export class VisitaPage implements OnInit {
   }
 
   limpiarFormulario() {
-    this.rut = '';
-    this.nombreV = '';
-    this.apellidoV = '';
-    this.selectedTorre = null;
-    this.selectedDepartamento = null;
-    this.patente = '';
-    this.opcionSeleccionada = '';
+    this.rutV = '';
+  this.nombreV = '';
+  this.apellidoV = '';
+  this.selectedTorre = null;
+  this.selectedDepartamento = null;
+  this.patente = '';
+  this.opcionSeleccionada = '';
+  }
+
+  ionViewWillEnter() {
+    const visitaData = history.state.visitaData;
+  if (visitaData) {
+    this.rutV = visitaData.rutV + "-" + visitaData.dvV;
+    this.nombreV = visitaData.nombreV;
+    this.apellidoV = visitaData.apellidoV;
+    this.selectedDepartamento = visitaData.selectedDepartamentoV;
+    this.selectedTorre = visitaData.selectedTorreV;
+    this.opcionSeleccionada = visitaData.opcionSeleccionadaV;
+    this.patente = visitaData.patente;
+  }
   }
   
   

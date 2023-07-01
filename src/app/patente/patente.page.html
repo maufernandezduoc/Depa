@@ -11,7 +11,6 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content [fullscreen]="true" class="ion-padding">
   <ion-header collapse="condense">
     <ion-toolbar>
@@ -26,6 +25,11 @@
     </ion-item>
 
     <ion-button expand="full" (click)="buscar()">Buscar</ion-button>
+
+    <div *ngIf="mostrarMensaje" class="mensaje-container">
+      <p>Vehículo no encontrado en el condominio</p>
+      <ion-button expand="full" (click)="agregarComoVisitaSoloPatente()">Agregar como visita</ion-button>
+    </div>
   </div>
 
   <div *ngIf="vehiculo" class="datos-container">
@@ -40,10 +44,21 @@
     <p><strong>Tipo de est:</strong> {{ vehiculo.tipo_est }}</p>
   </div>
 
-  <div *ngIf="!vehiculo" class="mensaje-container">
-    <p>{{ mensajeNoEncontrado }}</p>
+  <div *ngIf="vehiculoVisita" class="datos-container">
+    <h2>Datos del vehículo Visita:</h2>
+    <p><strong>Patente:</strong> {{ vehiculoVisita.patente }}</p>
+    <p><strong>Nombre:</strong> {{ vehiculoVisita.nombre }}</p>
+    <p><strong>Apellido:</strong> {{ vehiculoVisita.apellido }}</p>
+    <p><strong>Rut:</strong> {{ vehiculoVisita.rut_visita + "-" + vehiculoVisita.dv}}</p>
+    <p><strong>Ultima Visita</strong></p>
+    <p><strong>Departamento:</strong> {{ vehiculoVisita.id_departamento }}</p>
+    <p><strong>Torre:</strong> {{ vehiculoVisita.id_edificio }}</p>
+    <p><strong>Estacionamiento Ocupado:</strong> {{ vehiculoVisita.id_est }}</p>
+    <p><strong>Tipo de est:</strong> {{ vehiculoVisita.tipo_est }}</p>
   </div>
 
-  <!-- Agregar como visita solo si no se encontró el vehículo -->
-  <ion-button expand="full" (click)="agregarComoVisita()" *ngIf="!vehiculo && mostrarBotonVisita && patente">Agregar como visita</ion-button>
+  <ng-container *ngIf="vehiculoVisita !== undefined">
+    <ion-button expand="full" *ngIf="vehiculoVisita.estado === '0'" (click)="agregarComoVisita()">Agregar como visita</ion-button>
+    <ion-button expand="full" *ngIf="vehiculoVisita.estado === '1'" (click)="realizarSalida()">Salida</ion-button>
+  </ng-container>
 </ion-content>

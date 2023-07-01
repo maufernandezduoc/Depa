@@ -22,18 +22,17 @@
   <ion-list>
     <ion-item>
       <ion-label>RUT</ion-label>
-      <ion-input type="text" [(ngModel)]="rut" (ionChange)="validarRutDV(rut)" #rutInput></ion-input>
-
+      <ion-input type="text" [(ngModel)]="rutV" (ionChange)="validarRutDV(rutV)" #rutInput></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label>Nombre</ion-label>
-      <ion-input type="text" [(ngModel)] ='nombreV'></ion-input>
+      <ion-input type="text" [(ngModel)]="nombreV"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label>Apellido</ion-label>
-      <ion-input type="text" [(ngModel)] ='apellidoV'></ion-input>
+      <ion-input type="text" [(ngModel)]="apellidoV"></ion-input>
     </ion-item>
 
     <ion-item>
@@ -53,10 +52,12 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
+
     <ion-item>
       <ion-label>Patente (Opcional)</ion-label>
       <ion-input type="text" [(ngModel)]="patente"></ion-input>
     </ion-item>
+
     <ion-item>
       <ion-label>Estacionamiento (Opcional)</ion-label>
       <ion-select [(ngModel)]="opcionSeleccionada">
@@ -64,10 +65,9 @@
         <ion-select-option *ngFor="let estacionamiento of dataEst" [value]="estacionamiento.id_est">
           {{ estacionamiento.tipo_est }} - {{ estacionamiento.id_est.toString().substring(estacionamiento.id_est.toString().length - 3) }}
         </ion-select-option>
-        
       </ion-select>
     </ion-item>
-    
   </ion-list>
 
-  <ion-button expand="full" (click)="registrar()" >Registrar</ion-button>
+  <ion-button expand="full" (click)="registrar()">Registrar</ion-button>
+</ion-content>

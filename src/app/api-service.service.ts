@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiServiceService {
-  private API_URL = 'https://maufernandezduoc-orange-broccoli-45q6459xgrjhjvrv-3000.preview.app.github.dev'; // Reemplaza con la URL de tu API
+  private API_URL = 'http://localhost:3000'; // Reemplaza con la URL de tu API
 
   constructor(private http: HttpClient) { }
 
@@ -16,10 +16,7 @@ export class ApiServiceService {
     return this.http.get(`${this.API_URL}/TraerPatente`);
   }
 
-  buscarVehiculo(patente: string) {
-    return this.http.get(`${this.API_URL}/buscarVehiculo?patente=${patente}`);
-  }
-
+ 
   getCorreosElectronicosDepartamento(id: string) {
     return this.http.get(`${this.API_URL}/departamentos/${id}/persona`);
   }
@@ -52,7 +49,23 @@ export class ApiServiceService {
     return this.http.post(`${this.API_URL}/GuardarVisita`, visita);
   }
   
-  
+  buscarEnVisitas(patente: string) {
+    return this.http.get(`${this.API_URL}/buscarEnVisitas?patente=${patente}`);
+  }
+  buscarVehiculo(patente: string) {
+    return this.http.get(`${this.API_URL}/buscarVehiculo?patente=${patente}`);
+  }
+
+  actualizarEstacionamiento(id: string, nuevoEstado: number): Observable<any> {
+    const url = `${this.API_URL}/estacionamiento/${id}`;
+    return this.http.put(url, { estado: nuevoEstado });
+  }
+
+  actualizarFechaSal(patente: string, nuevaFechaSal: string): Observable<any> {
+    const url = `${this.API_URL}/modificarFechaSal`;
+    return this.http.put(url, { patente, nuevaFechaSal });
+  }
+
   
 
   // Agrega los demás métodos para interactuar con la API según tus necesidades

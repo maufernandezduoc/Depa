@@ -32,6 +32,7 @@ export class LoginPage {
 
       } else {
         console.log('Credenciales inválidas');
+        this.mostrarNotificacion('Usuario o Contraseña Invalida');// Almacena el rut del empleado
       }
     });
   }
