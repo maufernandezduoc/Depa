@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiServiceService {
-  private API_URL = 'https://maufernandezduoc-orange-broccoli-45q6459xgrjhjvrv.github.dev'; // Reemplaza con la URL de tu API
+  private API_URL = 'http://192.168.100.40:3000'; // Reemplaza con la URL de tu API
 
   constructor(private http: HttpClient) { }
 
