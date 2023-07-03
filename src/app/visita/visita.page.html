@@ -62,7 +62,7 @@
       <ion-label>Estacionamiento (Opcional)</ion-label>
       <ion-select [(ngModel)]="opcionSeleccionada">
         <ion-select-option value="">Seleccionar</ion-select-option>
-        <ion-select-option *ngFor="let estacionamiento of dataEst" [value]="estacionamiento.id_est">
+        <ion-select-option *ngFor="let estacionamiento of dataEst" [value]="estacionamiento.id_est" >
           {{ estacionamiento.tipo_est }} - {{ estacionamiento.id_est.toString().substring(estacionamiento.id_est.toString().length - 3) }}
         </ion-select-option>
       </ion-select>

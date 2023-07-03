@@ -34,10 +34,7 @@ const routes: Routes = [
     path: 'paquete',
     loadChildren: () => import('./paquete/paquete.module').then(m => m.PaquetePageModule)
   },
-  {
-    path: 'modal-foto-pedido',
-    loadChildren: () => import('./modal-foto-pedido/modal-foto-pedido.module').then( m => m.ModalFotoPedidoPageModule)
-  }
+ 
 ];
 
 @NgModule({

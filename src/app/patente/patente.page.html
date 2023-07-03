@@ -53,7 +53,7 @@
     <p><strong>Ultima Visita</strong></p>
     <p><strong>Departamento:</strong> {{ vehiculoVisita.id_departamento }}</p>
     <p><strong>Torre:</strong> {{ vehiculoVisita.id_edificio }}</p>
-    <p><strong>Estacionamiento Ocupado:</strong> {{ vehiculoVisita.id_est }}</p>
+    <p><strong>Estacionamiento Ocupado:</strong> {{ vehiculoVisita.id_est.toString().substring(vehiculoVisita.id_est.toString().length - 3) }}</p>
     <p><strong>Tipo de est:</strong> {{ vehiculoVisita.tipo_est }}</p>
   </div>
 

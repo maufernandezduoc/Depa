@@ -4,8 +4,8 @@ import { ApiServiceService } from '../api-service.service';
 import { formatDate } from '@angular/common';
 import { IonItem, IonTextarea, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ModalFotoPedidoPage } from '../modal-foto-pedido/modal-foto-pedido.page';
+
+
 
 
 import 'firebase/storage';
@@ -22,34 +22,18 @@ const username = localStorage.getItem('username');
   styleUrls: ['./paquete.page.scss'],
 })
 export class PaquetePage implements OnInit {
-  modal: HTMLIonModalElement | null = null;
   pedidoSeleccionado: any = null;
-  segundaFoto: string | null = null;
-  fotoPedido: string = '';
   capturedImageUri: string = '';
-  capturedImage: string = '';
-  segment: string = 'ingreso';
   selectedTorre: any;
   selectedDepartamento: any;
-  torres: any[] = [];
   departamentos: any[] = [];
   edificios: any[] = []; 
-  indicePedidoSeleccionado: number | null = null;
-
-
   departamentosFiltrados: any[] = [];
-  mensaje: string = ''; 
   segmentoActual: string = 'ingreso';
   pedidosR: any[] = [];
-  pedidoSeleccionadoIndex: number = -1;
-  fotoVisible: boolean = false;
-  imagenSeleccionada: string = '';
   nuevaFotoRetiro: string = '';
   username: string = '';
   retiroExitoso: boolean = false;
- 
-  segmentoActuali: string = 'ingreso';
-  pedidos: any[] = [];
   selectedPedido: any;
   selectedPedidoImage: string | null = null;
   @ViewChild('mensajeInput', { static: false }) mensajeInput!: IonTextarea;
@@ -318,21 +302,9 @@ export class PaquetePage implements OnInit {
     // Mostrar la foto del pedido seleccionado en un modal o en otra parte de la interfaz
     this.selectedPedido = pedido;
     this.selectedPedidoImage = pedido.evidencia_recepcion;
-    this.mostrarModalFotoPedido();
+    
   }
   
-  async mostrarModalFotoPedido() {
-    const modal = await this.modalController.create({
-      component: ModalFotoPedidoPage,
-      componentProps: {
-        image: this.selectedPedidoImage
-      }
-    });
-    await modal.present();
-  }
-  
-
-
 
 base64toBlob(base64String: string) {
   const byteString = atob(base64String);
