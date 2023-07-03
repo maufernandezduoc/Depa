@@ -56,14 +56,17 @@ export class PatentePage implements OnInit {
   
     if (patenteFormatted.trim() === '') {
       // Resto del código cuando patenteFormatted está vacío o contiene solo espacios en blanco
+      this.limpiarDatos();
     } else {
       this.apiService.buscarVehiculo(patenteFormatted).subscribe(
         (data: any) => {
+          this.limpiarDatos();
           this.vehiculo = data;
   
           if (!this.vehiculo) {
             this.apiService.buscarEnVisitas(patenteFormatted).subscribe(
               (dataVisita: any) => {
+                this.limpiarDatos();
                 this.vehiculoVisita = dataVisita;
   
                 if (!this.vehiculoVisita) {
@@ -81,10 +84,12 @@ export class PatentePage implements OnInit {
           }
         },
         (error: any) => {
+          this.limpiarDatos();
           // Resto del código cuando la búsqueda de vehículo falla
   
           this.apiService.buscarEnVisitas(patenteFormatted).subscribe(
             (dataVisita: any) => {
+              this.limpiarDatos();
               this.vehiculoVisita = dataVisita;
               // Resto del código después de buscarEnVisitas en caso de que la búsqueda de vehículo falle
   
@@ -101,6 +106,11 @@ export class PatentePage implements OnInit {
         }
       );
     }
+  }
+
+  limpiarDatos() {
+    this.vehiculo = null;
+    this.vehiculoVisita = null;
   }
   
   convertirAMayusculas() {
